@@ -11,7 +11,7 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - run: Workflow status.
+    - run: echo Workflow status.
       shell: bash
     - id: slack
       name: Post to a Slack channel
