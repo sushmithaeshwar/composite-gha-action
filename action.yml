@@ -17,7 +17,7 @@ runs:
       name: Post to a Slack channel
       uses: slackapi/slack-github-action@v1.21.0
       with:
-        channel-id: inputs.channel-id
+        channel-id: ${{ inputs.channel-id }}
         slack-message: "GitHub build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
       env:
         SLACK_BOT_TOKEN: ${{ inputs.slack-bot-token }}
