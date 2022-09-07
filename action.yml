@@ -18,10 +18,12 @@ runs:
         run_id="${{ github.run_id }}"
         token="${{ github.token }}"
 
-        status=$(curl -s -H "Authorization: token ${token}" "${url}/${repo}/actions/runs/${run_id}/" | \
+        status=$(curl -s -H "Authorization: token $token" "$url/$repo/actions/runs/$run_id/" | \
         jq -r '.status')
         
-        echo "::set-output name=status::${status}"
+        echo $status
+
+        echo "::set-output name=status::$status"
       shell: bash
 
     - id: notify
