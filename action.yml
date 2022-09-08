@@ -18,7 +18,7 @@ runs:
         run_id="${{ github.run_id }}"
         token="${{ github.token }}"
 
-        status=$(curl -s -H "Authorization: token ${{ github.token }}" "${{ github.api_url }}/repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/"
+        status=$(curl -s -H "Authorization: token ${{ github.token }}" "${{ github.api_url }}/repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/")
         
         echo $status
 
