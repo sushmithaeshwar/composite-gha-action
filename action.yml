@@ -18,11 +18,25 @@ runs:
         run_id="${{ github.run_id }}"
         token="${{ github.token }}"
 
-        status=$(curl -s -H "Authorization: token ${{ github.token }}" "${{ github.api_url }}/repos/${{ github.repository }}/actions/runs/${{ github.run_id }}" | jq -r .status)
-        
-        echo $status
+        failure=$(curl -s -H "Authorization: Bearer ${token}" -H "Accept: application/vnd.github+json" \
+        "${url}/${repo}/actions/runs/${run_id}/jobs" | \
+        jq -r '.jobs[] | select(.status == "completed" and .conclusion == "failure").conclusion' | \
+        wc -l)
+        cancelled=$(curl -s -H "Authorization: Bearer ${token}" -H "Accept: application/vnd.github+json" \
+        "${url}/${repo}/actions/runs/${run_id}/jobs" | \
+        jq -r '.jobs[] | select(.status == "completed" and .conclusion == "cancelled").conclusion' | \
+        wc -l)
 
-        echo "::set-output name=status::$status"
+        if [ "${failure}" -gt 0 ]; then
+          status="failure"
+        elif [ "${cancelled}" -gt 0 ]; then
+          status="cancelled"
+        else 
+          status="success"
+        fi
+        
+        echo "::set-output name=status::${status}"
+
       shell: bash
 
     - id: notify
